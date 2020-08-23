@@ -32,3 +32,7 @@ def square(number):
 
 print(square(3))
 ####By default function in python retursn None
+
+
+#We can return fuction inside a function
+#we can pass function to another function as argument(Helps in building decorator)
