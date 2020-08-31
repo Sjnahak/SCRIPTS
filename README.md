@@ -1,2 +1,2 @@
 # pyscript
-python code/learning
+python/bash/terraform code/learning
