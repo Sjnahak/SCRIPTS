@@ -1,10 +1,10 @@
 #!/bin/bash
 set -ef
-username=chandan340
-password=gedageda
-name=customerapi-node
+username=
+password=
+name=
 for i in $(cat /home/ec2-user/reponame.txt); do
-var=`curl -s -u $username:$password "https://api.bitbucket.org/2.0/workspaces/LineageNext/search/code?search_query=lineage_watermark.md+repo:$i" | jq -r '.values[].path_matches[].match'`
+var=`curl -s -u $username:$password "https://api.bitbucket.org/2.0/workspaces/team/search/code?search_query=lineage_watermark.md+repo:$i" | jq -r '.values[].path_matches[].match'`
 if [[ $var == "true" ]]
 then
     #echo "$i" >> /home/ec2-user/file1.txt
