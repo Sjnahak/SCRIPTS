@@ -33,3 +33,14 @@ for i in range(len(full_repo_list)):
   print full_repo_list[i]
   sys.stdout.close()
   sys.stdout = restorepoint
+  
+  
+  
+####################
+#!/usr/bin/python
+import os
+import subprocess
+#os.system("curl -s -u username:passwd 'https://api.bitbucket.org/2.0/workspaces/team/search/code?search_query=company_watermark.md+repo:reponame' | jq -r '.values[].path_matches[].match'")
+
+output = subprocess.check_output("curl -s -u username:passwd 'https://api.bitbucket.org/2.0/workspaces/team/search/code?search_query=company_watermark.md+repo:reponame' | jq -r '.values[].path_matches[].match'", shell=True)
+print output
