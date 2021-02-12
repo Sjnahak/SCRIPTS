@@ -1,0 +1,86 @@
+
+Groovy Script For Envionment name as 'env' for Active choice Parameter
+
+------------------
+
+return ["A","B"]
+
+------------------
+Choice type for above active choice is 'Single select'
+
+
+
+
+
+Groovy Script of Sub Environment named as 'SUB_ENV'(Active choice reactive Parameter)
+
+
+----------------------------------------------
+if(env.equals("A")){
+ 
+return ["1","2"]
+}
+else if(env.equals("B")){
+  return ["3","4"]
+}
+
+else{
+    return ["Select a environment from dropdown"]
+}
+
+----------------------------------------------
+choice typefor above active choice reactive parameter is also 'Single select'
+refrenced parameter here is 'env'
+
+
+Groovy Script for Active choice reactive reference parameter reqd for  Checkbox and Email Textbox
+
+-------------------------------------------------------------------------------
+html='''<input type="checkbox" name="check1" onclick="dynInput(this);"/>
+<p id="insertinputs"></p>
+<script>function dynInput(cbox) {
+      if (cbox.checked) {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name= "value";
+        input.class= "setting-input";
+        var div = document.createElement("div");
+        div.id = cbox.name;
+        div.innerHTML = "Email"
+        div.appendChild(input);
+        document.getElementById("insertinputs").appendChild(div);
+      } else {
+        document.getElementById(cbox.name).remove();
+      }
+    }</script>
+'''
+return html
+
+
+html='''
+<label for="Email">
+  <input type="checkbox" id="chkEmail" />
+   
+</label>
+
+<div id="dvEmail" style="display: none">
+   Email-Id:
+   <input type="text" id="txtEmail" name="value" class="setting-input" />
+</div>
+<br>
+<br>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+   $(function () {
+       $("#chkEmail").click(function () {
+           if ($(this).is(":checked")) {
+               $("#dvEmail").show();
+           } else {
+               $("#dvEmail").hide();
+           }
+       });
+   });
+</script>
+'''
+return html
