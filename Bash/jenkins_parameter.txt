@@ -84,3 +84,40 @@ html='''
 </script>
 '''
 return html
+
+
+# One checkbox with two text box
+
+html='''
+<label for="Query">
+  <input type="checkbox" id="chkQuery" />   
+</label>
+<div id="dvSourceQuery" style="display: none">
+   Souce Query:
+   <input type="text" id="txtQuery" name="value" class="setting-input" />
+   <br>
+  <br>
+   Target Query:
+   <input type="text" id="txtQuery" name="value" class="setting-input" />
+</div>
+
+ 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+ 
+
+<script type="text/javascript">
+   $(function () {
+       $("#chkQuery").click(function () {
+           if ($(this).is(":checked")) {
+               $("#dvSourceQuery").show();
+           } else {
+               $("#dvSourceQuery").hide();
+           }
+       });
+   });
+</script>
+'''
+return html
