@@ -1,0 +1,80 @@
+/*
+# one.yaml
+---
+dashboards:
+    - dashboard1
+    - dashboard2
+reports:
+    - report1
+    - report2
+
+readyaml in jenkinsfile:
+environment {
+	def datas = readYaml file: 'one.yaml'
+}
+
+# example 1
+def loadValuesYaml(x){
+  def valuesYaml = readYaml (file: 'one.yaml')
+  return valuesYaml[x];
+}
+
+pipeline {
+    agent { node { label 'mule-build' } }
+    
+    environment {
+		APP=loadValuesYaml('dashboards')
+        REPLICACOUNT=loadValuesYaml('reports')
+    }
+*/
+# example 2 to convert in string
+def loadValuesYaml(x){
+  def valuesYaml = readYaml (file: 'one.yaml')
+  return valuesYaml[x];
+}
+
+pipeline {
+    agent { node { label 'mule-build' } }
+    
+    environment {
+		// you can remove space
+		APP=loadValuesYaml('dashboards').join(", ")
+        report=loadValuesYaml('reports')join(", ")
+    }
+    stages {
+        stage("one") { //Stage 1 will build POM.xml and will create binary
+            steps {
+               sh '''
+                   echo "${APP}"
+				   // Output: dashboard1, dashboard2
+                '''
+          }
+        }
+        stage('two') { //Stage 2 will run static analysis with SonarQube
+            steps {
+               sh '''
+                   echo "${report}"
+				   // Output: report1, report2
+                '''
+            }
+        }
+		
+		stage('three') { //Stage 2 will run static analysis with SonarQube
+            steps {
+                script {
+                    report.split(',').each {
+				        sh """#!/bin/bash
+				            set -ef
+							echo "do more stuff"
+				            ls -l ${it}.zip
+						"""
+				}
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
