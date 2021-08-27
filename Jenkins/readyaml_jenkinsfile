@@ -34,7 +34,7 @@ def loadValuesYaml(x){
 }
 
 pipeline {
-    agent { node { label 'mule-build' } }
+    agent { node {  } }
     
     environment {
 		// you can remove space

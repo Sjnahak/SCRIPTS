@@ -1,0 +1,30 @@
+#! groovy
+node ('agent3') {
+	def dashrepo_name
+	if (deployment_type == 'Reports') {
+    	dashrepo_name=loadValuesYaml('reports')join(",");
+    } else if (deployment_type == 'Dashboards') {
+    	dashrepo_name=loadValuesYaml('dashboards')join(",");
+	}
+	stage('Download zip jfrog') {	
+		dir("${WORKSPACE}/devops") {
+			sh script: "for report in $(echo ${dashrepo_name} | tr ',' '\n'); do echo $report; done"
+		}			
+	}
+	stage('Validate Jrxml files QA-PROD') {
+		dashrepo_name.split(',').each {
+			sh script: """#!/bin/bash
+						  set -ef
+						  echo ${it} stage 2"""
+		}
+	}
+	stage('Take prod backup') {
+		dir ("$WORKSPACE/devops") {
+			sh script: "echo ${dashrepo_name} stage 3"
+		}
+	}
+}
+def loadValuesYaml(x){
+  def valuesYaml = readYaml (file: "${env.WORKSPACE}/devops/${params.'version'}.yaml")
+  return valuesYaml[x];
+}

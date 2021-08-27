@@ -57,5 +57,50 @@ for build in $BUILDS_NAME ; do
     fi
 done
 
+
+##########################Scheduled cleanup #############################################
+#!/bin/bash
+BUILDS_NAME="app1-api-dev
+app2-api-dev"
+REPO_NAME="app1-api-dev
+app2-api-dev"
+#echo "Enter tag devartifact or qaartifact or stageartifact name?"
+artifact_tag="devartifact"
+#echo "Enter tag snapshot or qaartifact or stageartifact name?"
+artifact_value="snapshot"
+jfrog_user=""
+jfrog_pass=""
+
+
+# FETCHING URL DETAIS FOR MATCHING PROPERTY NAME Env property repos, Fetcth Corresponding builds to delete using the usl
+#devartifact=snapshot one job, qaartifact=qaartifact stageartifact=stageartifact
+
+for repo in $REPO_NAME; do
+    repocmp=`echo $repo | cut -f1 -d"-"`
+    for build in $BUILDS_NAME; do
+      buildcmp=`echo $build | cut -f1 -d"-"`
+      if [ "$repocmp" = "$buildcmp" ]
+      then
+          untagged_jar=`curl -s -u $jfrog_user:$jfrog_pass "https://companyname.jfrog.io/artifactory/api/search/prop?$artifact_tag=$artifact_value&build.name=$build&repos=$repo" | jq -r '.results[]?.uri' |head -n -1`
+          if [ -z "$untagged_jar" ]
+          then
+              echo "#####NO Snapshot BUILD FOUND FOR $build NOTHING TO DELETE HENCE MOVING TO NEXT REPO#####"
+          else
+              for build_info in $untagged_jar; do
+                  snapshot_build=`curl -s -u $jfrog_user:$jfrog_pass $build_info?properties=build.number  | jq -r '.properties[]?[]'`
+                  #echo "#####SNAPHOT BUILD NUMBER FOUND FOR $build HENCE PROCEEDING WITH DELETE LOOP####"
+                  echo "https://companyname.jfrog.io/artifactory/api/build/$build?buildNumbers=$snapshot_build"
+                  #curl -X DELETE -u $jfrog_user:$jfrog_pass "https://comapnyname.jfrog.io/artifactory/api/build/$build?buildNumbers=$snapshot_build"
+                  PATH_TO_ARTIFACT=`curl -s -X GET -u $jfrog_user:$jfrog_pass $build_info | jq -r '.downloadUri'`
+                  echo $PATH_TO_ARTIFACT
+                  #curl -X DELETE -u $jfrog_user:$jfrog_pass "$PATH_TO_ARTIFACT"
+              done
+          fi
+      else
+          true
+      fi
+    done
+done
+
 #head -n -1   removes 1 line from bottom
 #tail -n +2   removes 1 line lesser than the provided number from top(example if given 2 it will remove 1)

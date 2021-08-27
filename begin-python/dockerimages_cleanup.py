@@ -19,7 +19,7 @@ def clean_docker():
 		#data = 'items.find({"repo" : "reponame"},{"name":{"$eq":"manifest.json"}},{"artifact.module.build.name":{"$eq":"demoname"}},{"artifact.module.build.number":{"$eq":"9"}})'
 
         myResp = requests.post(base_url+'api/search/aql', auth=('username', 'password'), headers=headers, data=data)
-
+        #for result in myResp.json()["results"]: when eval gives key error
         for result in eval(myResp.text)["results"]:
             artifact_url = base_url+ result['repo'] + '/' + result['path']
 			print(artifact_url)

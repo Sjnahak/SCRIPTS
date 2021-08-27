@@ -121,3 +121,127 @@ html='''
 </script>
 '''
 return html
+
+###########################################Hide one variable box when selected other variable#############################################
+html='''
+<div id="Source">
+<label for="SourceQuery">
+Source_Query<input type="checkbox" id="chkSource" />   
+</label>
+</div>
+<br>
+
+
+<div id="dvSource" style="display: none">
+   Source_Query:
+   <input type="text" id="txtSource" name="value" class="setting-input" />
+</div>
+<br>
+<br>
+<div id="SourceTarget">
+<label for="Query">
+Source_Vs_Target<input type="checkbox" id="chkSourceQuery" />   
+</label>
+</div>
+<div id="dvSourceQuery" style="display: none">
+   Souce_Query:
+   <input type="text" id="txtQuery" name="value" class="setting-input" />
+   <br>
+  <br>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+   $(function () {
+       $("#chkSource").click(function () {
+           if ($(this).is(":checked")) {
+               $("#dvSource").show();
+               //$("#chkSourceQuery").hide();
+               //$("#dvSourceQuery").hide();
+               $("#SourceTarget").hide();
+           } else {
+               $("#dvSource").hide();
+               //$("#chkSourceQuery").show();
+               $("#SourceTarget").show();
+           }
+       });
+   });
+</script>
+<script type="text/javascript">
+   $(function () {
+       $("#chkSourceQuery").click(function () {
+           if ($(this).is(":checked")) {
+             $("#dvSourceQuery").show();
+             
+             $("#Source").hide();
+             
+           } else {
+               $("#dvSourceQuery").hide();
+               
+                $("#Source").show();
+           }
+       });
+   });
+</script>
+'''
+return html
+
+
+########################################################################different way##############################################
+html='''
+<label for="Query">Query Types</label>
+<select name="Queries" id="query">
+ <option value="options" id="chk">Select From Below</option>
+    <option value="SourceQuery" id="chkSource">Source_Query</option>
+    <option value="SourceTargetQuery" id="chkSourceQuery">SourceVSTarget</option>
+    
+  </select>
+  <br>
+<br>
+
+
+<div id="dvSource" style="display: none">
+   Source_Query:
+   <input type="text" id="txtSource" name="value" class="setting-input" />
+</div>
+<br>
+<br>
+
+
+<div id="dvSourceQuery" style="display: none">
+   Souce Query:
+   <input type="text" id="txtQuery" name="value" class="setting-input" />
+   <br>
+  <br>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script  type="text/javascript">
+$(function(){
+
+ $("#query").change(function(){
+     var query = this.value;
+   if(query=="SourceQuery")
+   {
+     $("#dvSource").show();
+      $("#dvSourceQuery").hide();
+     }
+     else if(query=="SourceTargetQuery")
+     {
+     $("#dvSourceQuery").show();
+      $("#dvSource").hide();
+     
+     }
+     else
+     {
+      $("#dvSource").hide();
+      $("#dvSourceQuery").hide();
+     }
+  });
+});
+</script>
+'''
+return html
