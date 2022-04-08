@@ -102,5 +102,42 @@ for repo in $REPO_NAME; do
     done
 done
 
+
+############################################################delete by passing build number #########################################################
+#!/usr/bin/python
+def clean_docker():
+    import requests
+    import sys
+    import subprocess
+    import os
+
+    base_url = 'https://company.jfrog.io/artifactory/'
+
+    headers = {
+        'content-type': 'text/plain',
+    }
+
+    username = ''
+    password = ''
+    build = ''
+    reps = ''
+
+    for x in range(60, 89):
+        data = 'items.find({"repo" : "%s"},{"artifact.module.build.name":{"$eq":"%s"}},{"artifact.module.build.number":{"$eq":"%s"}})' % (reps, build, x)
+        myResp = requests.post(base_url+'api/search/aql', auth=(username, password), headers=headers, data=data)
+        mylist=myResp.json()["results"]
+        for obj in mylist:
+            jar=obj.get('name')
+
+            artifact_url = base_url+ reps + '/' + jar
+            print(artifact_url)
+            build_url = base_url+'api/build/%s?buildNumbers=%s' % (build, x)
+            print(build_url)
+            #requests.delete(artifact_url, auth=(username, password))
+            #requests.delete(build_url, auth=(username, password))
+
+if __name__ == '__main__':
+    clean_docker()
+
 #head -n -1   removes 1 line from bottom
 #tail -n +2   removes 1 line lesser than the provided number from top(example if given 2 it will remove 1)
