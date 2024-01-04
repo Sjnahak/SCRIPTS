@@ -26,3 +26,5 @@ print(f"Uppercase letters: {extract_upper(name)}")
 
 ###Package
 #If a directory has __init__py file it is considered as package
+https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/
+https://github.com/pypa/sampleproject
